@@ -7,7 +7,6 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.sample.tictactoe.databinding.ActivityGameBinding
-import com.sample.tictactoe.game.GameLogic
 import com.sample.tictactoe.game.viewmodel.GameViewModel
 import com.sample.tictactoe.result.ResultActivity
 import kotlinx.coroutines.launch
@@ -17,18 +16,17 @@ class GameActivity : AppCompatActivity() {
     private lateinit var vmGame: GameViewModel
 
     private var boardList = mutableListOf<Button>()
-
-    private val nought = "O"
-    private val cross = "X"
-
+    private var turn = "Turn X"
+    private var isSinglePlayer: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        isSinglePlayer = intent.getBooleanExtra("is_single_player", false)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initBoard()
-        vmGame = GameViewModel(boardList)
-        observeTurn()
+        vmGame = GameViewModel(boardList, isSinglePlayer)
+        observe()
     }
 
     private fun initBoard() {
@@ -46,31 +44,30 @@ class GameActivity : AppCompatActivity() {
     fun boardTapped(view: View) {
         if (view !is Button)
             return
+        if(isSinglePlayer && turn == "Turn O"){
+            return
+        }
         vmGame.addToBoard(view)
-
-        if (GameLogic.checkForVictory(nought, boardList)) {
-            result("Noughts Win!")
-        } else if (GameLogic.checkForVictory(cross, boardList)) {
-            result("Crosses Win!")
-        }
-
-        if (vmGame.fullBoard()) {
-            result("Draw")
-        }
     }
 
-    private fun result(title: String) {
-        val nextActivity = Intent(this@GameActivity, ResultActivity::class.java)
-        nextActivity.putExtra("Game_score", title)
-        startActivity(nextActivity)
-        finish()
-    }
-
-    private fun observeTurn() {
+    private fun observe() {
         lifecycleScope.launch {
             vmGame.turn.collect {
                 if (it != "") {
                     binding.turnTV.text = it
+                    turn = it
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            vmGame.result.collect {
+                if (it != "") {
+                    val nextActivity = Intent(this@GameActivity, ResultActivity::class.java)
+                    nextActivity.putExtra("game_score", it)
+                    nextActivity.putExtra("is_single_player", isSinglePlayer)
+                    startActivity(nextActivity)
+                    finish()
                 }
             }
         }

@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.sample.tictactoe.game.ui.GameActivity
 import com.sample.tictactoe.R
 import com.sample.tictactoe.databinding.ActivityMenuBinding
+import com.sample.tictactoe.game.ui.GameActivity
 
 class MenuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMenuBinding
@@ -23,9 +23,28 @@ class MenuActivity : AppCompatActivity() {
         )
 
         binding.startGameButton.setOnClickListener {
-            val nextActivity = Intent(this, GameActivity::class.java)
-            startActivity(nextActivity)
-            finish()
+
+            val builder = AlertDialog.Builder(this)
+            builder
+                .setTitle(resources.getString(R.string.play_with_bot_question))
+                .setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
+                    val nextActivity = Intent(this, GameActivity::class.java)
+                    nextActivity.putExtra("is_single_player", true)
+                    startActivity(nextActivity)
+                    finish()
+                }
+                .setNegativeButton(
+                    resources.getString(R.string.no)
+                ) { _, _ ->
+                    val nextActivity = Intent(this, GameActivity::class.java)
+                    nextActivity.putExtra("is_single_player", false)
+                    startActivity(nextActivity)
+                    finish()
+                }
+            builder.create()
+            builder.show()
+
+
         }
         binding.exit.setOnClickListener {
             closeApp()

@@ -4,6 +4,7 @@
     <string name="exit_the_application">Exit the application</string>
     <string name="start_game">Start game</string>
     <string name="are_you_sure_you_want_to_exit">Are you sure you want to exit the application?</string>
+    <string name="play_with_bot_question">You want to play with a bot?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="turn_x">Turn X</string>

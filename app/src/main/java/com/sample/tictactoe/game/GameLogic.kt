@@ -3,7 +3,7 @@ package com.sample.tictactoe.game
 import android.widget.Button
 
 class GameLogic {
-    companion object{
+    companion object {
         fun checkForVictory(s: String, boardList: List<Button>): Boolean {
             //Horizontal Victory
             if (match(boardList[0], s) && match(boardList[1], s) && match(boardList[2], s))
