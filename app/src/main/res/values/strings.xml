@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Tic tac toe</string>
+    <string name="tic_tac_toe">Tic tac toe</string>
+    <string name="exit_the_application">Exit the application</string>
+    <string name="start_game">Start game</string>
+    <string name="are_you_sure_you_want_to_exit">Are you sure you want to exit the application?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="turn_x">Turn X</string>
+    <string name="button_restart_level">Button restart level</string>
+    <string name="button_go_to_home_screen">Button go to home screen</string>
+</resources>
